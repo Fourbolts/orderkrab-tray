@@ -2,6 +2,8 @@
 
 <project name="qz" default="distribute" basedir=".">
     <property file="ant/project.properties"/>
+    <property name="app.name" value="PrintKrab"/>
+    <property name="project.filename" value="printkrab"/>
     <import file="ant/platform-detect.xml"/>
     <import file="ant/javafx.xml"/>
     <import file="ant/signing.xml"/>
@@ -86,7 +88,7 @@
             <!-- Some root level files will cause jlink to fail, they need to be cleaned up -->
             <fileset dir="${out.dir}/libs-temp" excludes="*.class,LICENSE,jetty-dir.css,about.html,Log4j-*"/>
             <manifest>
-                <attribute name="Application-Name" value="${project.name}"/>
+                <attribute name="Application-Name" value="${app.name}"/>
                 <attribute name="Main-Class" value="qz.App"/>
                 <attribute name="Permissions" value="all-permissions"/>
                 <attribute name="Multi-Release" value="true"/>
