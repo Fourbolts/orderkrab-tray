@@ -383,13 +383,8 @@ var qz = (function() {
                     }
 
                     _qz.security.callCert().then(sendCert).catch(function(error) {
-                        _qz.log.warn("Failed to get certificate:", error);
-
-                        if (_qz.security.rejectOnCertFailure) {
-                            openPromise.reject(error);
-                        } else {
-                            sendCert(null);
-                        }
+                        // PrintKrab: certificate failures never block the connection
+                        sendCert(null);
                     });
                 },
 
