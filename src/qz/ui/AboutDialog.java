@@ -1,6 +1,5 @@
 package qz.ui;
 
-import com.github.zafarkhaja.semver.Version;
 import org.eclipse.jetty.server.Server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,8 +39,6 @@ public class AboutDialog extends BasicDialog implements Themeable {
     private static final Logger log = LogManager.getLogger(AboutDialog.class);
     private final boolean limitedDisplay;
     private Server server;
-    private JLabel lblUpdate;
-    private JButton updateButton;
 
     private JPanel contentPanel;
     private JToolBar headerBar;
@@ -84,30 +81,13 @@ public class AboutDialog extends BasicDialog implements Themeable {
         aboutPanel.add(logo);
 
         if (!limitedDisplay) {
-            LinkLabel linkNew = new LinkLabel("What's New?");
-            linkNew.setLinkLocation(Constants.VERSION_DOWNLOAD_URL);
-
-            lblUpdate = new JLabel();
-            updateButton = new JButton();
-            updateButton.setVisible(false);
-            updateButton.addActionListener(evt -> {
-                try { Desktop.getDesktop().browse(new URL(Constants.ABOUT_DOWNLOAD_URL).toURI()); }
-                catch(Exception e) { log.error("", e); }
-            });
-            checkForUpdate();
-            versionBox.add(Box.createHorizontalStrut(12));
-            versionBox.add(linkNew);
-
             infoPanel.add(lblAbout);
             infoPanel.add(Box.createVerticalGlue());
             infoPanel.add(versionBox);
             infoPanel.add(Box.createVerticalGlue());
-            infoPanel.add(lblUpdate);
-            infoPanel.add(updateButton);
+            infoPanel.add(new TextWrapLabel(String.format("%s is written by %s.", Constants.ABOUT_TITLE, Constants.ABOUT_COMPANY)));
             infoPanel.add(Box.createVerticalGlue());
-            infoPanel.add(new TextWrapLabel(String.format("%s is written and supported by %s.", Constants.ABOUT_TITLE, Constants.ABOUT_COMPANY)));
-            infoPanel.add(Box.createVerticalGlue());
-            infoPanel.add(new TextWrapLabel(String.format("If using %s commercially, please first reach out to the website publisher for support issues.", Constants.ABOUT_TITLE)));
+            infoPanel.add(new TextWrapLabel(String.format("If using the app commercially, please first reach out to the website publisher for support issues.", Constants.ABOUT_TITLE)));
             infoPanel.add(Box.createVerticalGlue());
             infoPanel.add(linkLibrary);
             infoPanel.setPreferredSize(logo.getPreferredSize());
@@ -244,25 +224,6 @@ public class AboutDialog extends BasicDialog implements Themeable {
         setDropBorder(false);
     }
 
-    private void checkForUpdate() {
-        Version latestVersion = AboutInfo.findLatestVersion();
-        if (latestVersion.greaterThan(Constants.VERSION)) {
-            lblUpdate.setText("An update is available:");
-
-            updateButton.setText("Download " + latestVersion);
-            updateButton.setVisible(true);
-        } else if (latestVersion.lessThan(Constants.VERSION)) {
-            lblUpdate.setText("You are on a beta release.");
-
-            updateButton.setText("Revert to stable " + latestVersion);
-            updateButton.setVisible(true);
-        } else {
-            lblUpdate.setText("You have the latest version.");
-
-            updateButton.setVisible(false);
-        }
-    }
-
     private void setDropBorder(boolean isShown) {
         if(isShown) {
             if(contentPanel.getBorder() == null) {
@@ -303,10 +264,6 @@ public class AboutDialog extends BasicDialog implements Themeable {
 
     @Override
     public void setVisible(boolean visible) {
-        if (visible && !limitedDisplay) {
-            checkForUpdate();
-        }
-
         super.setVisible(visible);
     }
 
