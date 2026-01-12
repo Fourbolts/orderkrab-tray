@@ -139,13 +139,19 @@
         <delete file="${out.dir}/${project.filename}${build.type}-${build.version}-${apple.target.arch}-unbranded.pkg"/>
     </target>
 
-    <target name="build-dmg" depends="get-identity,add-certificates,get-version">
+    <target name="build-dmg" depends="get-identity,add-certificates,get-version,platform-detect">
         <echo level="info">Creating app bundle</echo>
         <!--
         #####################################
         #  Create payload and bundle as dmg #
         #####################################
         -->
+
+        <!-- Get the os-preferred name for the target architecture -->
+        <condition property="apple.target.arch" value="arm64">
+            <isset property="target.arch.aarch64"/>
+        </condition>
+        <property name="apple.target.arch" value="x86_64" description="fallback value"/>
 
         <!-- Dmg JSON -->
         <copy file="ant/apple/appdmg.json.in" tofile="${build.dir}/appdmg.json">
@@ -162,7 +168,7 @@
 
         <exec executable="appdmg" failonerror="true">
             <arg value="${build.dir}/appdmg.json"/>
-            <arg value="${out.dir}/${project.filename}${build.type}-${build.version}.dmg"/>
+            <arg value="${out.dir}/${project.filename}${build.type}-${build.version}-${apple.target.arch}.dmg"/>
         </exec>
     </target>
 
