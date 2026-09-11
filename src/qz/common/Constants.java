@@ -32,7 +32,7 @@ public class Constants {
     public static final int BORDER_PADDING = 10;
 
     public static final String ABOUT_TITLE = "PrintKrab";
-    public static final String ABOUT_EMAIL = "support@qz.io";
+    public static final String ABOUT_EMAIL = "support@orderkrab.com";
     public static final String ABOUT_URL = "https://qz.io";
     public static final String ABOUT_COMPANY = "QZ Industries, LLC";
     public static final String ABOUT_CITY = "Canastota";
